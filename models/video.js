@@ -2,22 +2,61 @@ const mongoose = require('mongoose');
 
 // Video Schema
 const VideoSchema = mongoose.Schema({
-    artist:{
+    artist: {
 		type: String,
 		required: true
     },
-	title:{
+	title: {
 		type: String,
 		required: true
     },
-	video_url:{
+	video_url: {
 		type: String
 	},
-	create_date:{
+	create_date: {
 		type: Date,
 		default: Date.now
 	}
 });
+
+const Video = mongoose.model('Video', VideoSchema);
+
+// Get Videos
+Video.getVideos = (callback, limit) => {
+	Video.find(callback).limit(limit);
+}
+
+// Get Video
+Video.getVideoById = (id, callback) => {
+	Video.findById(id, callback);
+}
+
+// Add Video
+Video.addVideo = (video, callback) => {
+	Video.create(video, callback);
+}
+
+// Update Video
+Video.updateVideo = (id, video, options, callback) => {
+	var query = {_id: id};
+	var update = {
+        artist: video.artist,
+        title: video.title,
+        video_url: video.video_url,
+	}
+	Video.findOneAndUpdate(query, update, options, callback);
+}
+
+// Delete Video
+Video.removeVideo = (id, callback) => {
+	var query = {_id: id};
+	Video.remove(query, callback);
+}
+
+module.exports = Video;
+
+
+/*
 
 const Video = module.exports = mongoose.model('Video', VideoSchema);
 
@@ -52,3 +91,5 @@ module.exports.removeVideo = (id, callback) => {
 	var query = {_id: id};
 	Video.remove(query, callback);
 }
+
+*/
